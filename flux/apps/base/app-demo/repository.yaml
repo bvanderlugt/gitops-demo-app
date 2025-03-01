@@ -4,5 +4,6 @@ metadata:
   name: app-demo
   namespace: app-demo
 spec:
+  type: "oci"
   interval: 5m
   url: oci://ghcr.io/bvanderlugt/gitops-demo-app-app-demo
