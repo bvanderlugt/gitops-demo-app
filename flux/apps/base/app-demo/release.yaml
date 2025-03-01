@@ -1,0 +1,25 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: app-demo
+  namespace: app-demo
+spec:
+  releaseName: app-demo
+  chart:
+    spec:
+      chart: app-demo
+      sourceRef:
+        kind: HelmRepository
+        name: app-demo
+  interval: 50m
+  install:
+    remediation:
+      retries: 3
+  values:
+    redis:
+      enabled: true
+      repository: public.ecr.aws/docker/library/redis
+      tag: 7.0.6
+    ingress:
+      enabled: true
+      className: nginx
