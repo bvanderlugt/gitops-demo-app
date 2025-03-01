@@ -7,3 +7,5 @@ spec:
   interval: 5m
   url: oci://ghcr.io/bvanderlugt/gitops-demo-app-app-demo
   type: oci
+  secretRef:
+    name: ghcr-credentials
