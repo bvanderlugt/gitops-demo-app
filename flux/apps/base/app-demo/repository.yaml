@@ -1,9 +1,9 @@
-apiVersion: source.toolkit.fluxcd.io/v1
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: app-demo
   namespace: app-demo
 spec:
-  type: "oci"
   interval: 5m
   url: oci://ghcr.io/bvanderlugt/gitops-demo-app-app-demo
+  type: oci
