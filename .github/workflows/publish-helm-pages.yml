@@ -1,0 +1,86 @@
+name: Publish Helm Chart to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'helm-chart/**'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Chart version override (optional)'
+        required: false
+        type: string
+
+jobs:
+  publish-helm-chart:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Update chart version if specified
+        if: ${{ github.event.inputs.version != '' }}
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          echo "Updating chart version to: $VERSION"
+          sed -i "s/^version: .*/version: $VERSION/" helm-chart/Chart.yaml
+          sed -i "s/^appVersion: .*/appVersion: \"$VERSION\"/" helm-chart/Chart.yaml
+          cat helm-chart/Chart.yaml
+
+      - name: Create gh-pages branch if it doesn't exist
+        run: |
+          if ! git ls-remote --heads origin gh-pages; then
+            git checkout --orphan gh-pages
+            git rm -rf .
+            git commit --allow-empty -m "Initial gh-pages branch"
+            git push origin gh-pages
+          fi
+
+      - name: Package Helm chart
+        run: |
+          mkdir -p .cr-release-packages
+          mkdir -p .cr-index
+          helm package helm-chart --destination .cr-release-packages
+
+      - name: Checkout gh-pages branch
+        run: |
+          git checkout gh-pages
+          # Remove all files except .git in the gh-pages branch
+          find . -maxdepth 1 -not -path "./.git*" -not -path "." -exec rm -rf {} \;
+          # Create charts directory if it doesn't exist
+          mkdir -p charts
+
+      - name: Move packaged chart and create/update index
+        run: |
+          # Move the packaged chart to the charts directory
+          cp .cr-release-packages/*.tgz charts/
+          
+          # Create or update the Helm repository index
+          helm repo index --url https://bvanderlugt.github.io/gitops-demo-app/charts charts/
+          cp charts/index.yaml index.yaml
+          
+          ls -la charts/
+          cat index.yaml
+
+      - name: Commit and push changes
+        run: |
+          git add charts/ index.yaml
+          git commit -m "Update Helm chart repository"
+          git push origin gh-pages
