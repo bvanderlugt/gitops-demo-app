@@ -5,7 +5,7 @@ metadata:
   namespace: app-demo
 spec:
   interval: 5m
-  url: oci://ghcr.io/bvanderlugt/gitops-demo-app-app-demo
+  url: oci://ghcr.io/bvanderlugt
   type: oci
   secretRef:
     name: ghcr-credentials
