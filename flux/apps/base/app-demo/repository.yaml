@@ -5,7 +5,4 @@ metadata:
   namespace: app-demo
 spec:
   interval: 5m
-  url: oci://ghcr.io/bvanderlugt
-  type: oci
-  secretRef:
-    name: ghcr-credentials
+  url: https://raw.githubusercontent.com/bvanderlugt/gitops-demo-app/main/helm-chart
