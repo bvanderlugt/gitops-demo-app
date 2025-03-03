@@ -6,6 +6,6 @@ metadata:
 spec:
   interval: 5m
   type: "oci"
-  url: oci://ghcr.io/bvanderlugt/app-demo-chart
+  url: oci://ghcr.io/bvanderlugt
   secretRef:
     name: ghcr-credentials
