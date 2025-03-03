@@ -89,7 +89,7 @@ jobs:
           
           # Update values.yaml to point to the new image and version
           # Update repository to point to GitHub Container Registry
-          sed -i "s|repository: .*|repository: ${{ env.REGISTRY }}/${{ github.repository_owner }}/$(echo ${{ github.repository }} | cut -d '/' -f 2)-app-demo|" helm-chart/values.yaml
+          sed -i "s|repository: .*|repository: ${{ env.REGISTRY }}/${{ github.repository_owner }}/app-demo-chart|" helm-chart/values.yaml
           
           # Update tag to use the specified version
           sed -i "s/tag: .*/tag: \"${{ github.event.inputs.version }}\"/" helm-chart/values.yaml
