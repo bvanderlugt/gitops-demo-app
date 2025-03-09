@@ -7,7 +7,7 @@ spec:
   releaseName: app-demo
   chart:
     spec:
-      chart: app-demo-chart
+      chart: app-demo
       sourceRef:
         kind: HelmRepository
         name: app-demo

@@ -6,6 +6,7 @@ metadata:
 spec:
   interval: 5m
   type: "oci"
-  url: oci://ghcr.io/bvanderlugt
-  secretRef:
-    name: ghcr-credentials
+    #url: oci://ghcr.io/bvanderlugt/gitops-demo-app
+  url: oci://localhost:5000/helm-charts
+    #secretRef:
+    #name: ghcr-credentials
