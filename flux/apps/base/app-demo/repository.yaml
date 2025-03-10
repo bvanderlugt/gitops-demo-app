@@ -7,6 +7,7 @@ spec:
   interval: 5m
   type: "oci"
     #url: oci://ghcr.io/bvanderlugt/gitops-demo-app
+  insecure: true  # for using local oci registry
   url: oci://localhost:5000/helm-charts
     #secretRef:
     #name: ghcr-credentials
